@@ -1,15 +1,293 @@
-<h2>Latest Posts</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.5;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        nav {
+            background-color: #1e293b;
+            color: white;
+            padding: 1rem 0;
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+        }
+        .hero {
+            position: relative;
+            height: 500px;
+            background-image: url('/placeholder.svg?height=500&width=1920');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.7), rgba(147, 51, 234, 0.7));
+            display: flex;
+            align-items: center;
+        }
+        .hero-content {
+            max-width: 48rem;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .search-form {
+            display: flex;
+            max-width: 24rem;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem 0 0 0.25rem;
+        }
+        .search-button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0 0.25rem 0.25rem 0;
+            cursor: pointer;
+        }
+        .section {
+            padding: 3rem 0;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: bold;
+        }
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .card-image {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 1rem;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .card-description {
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #e5e7eb;
+            color: #111827;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+        .recent-posts {
+            background-color: #f9fafb;
+        }
+        .recent-post-card {
+            padding: 1rem;
+        }
+        .recent-post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .recent-post-icon {
+            margin-right: 0.5rem;
+        }
+        .recent-post-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        .recent-post-date {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        .newsletter {
+            background-color: #2563eb;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .newsletter-content {
+            max-width: 32rem;
+            margin: 0 auto;
+        }
+        .newsletter-form {
+            display: flex;
+            max-width: 24rem;
+            margin: 1.5rem auto 0;
+        }
+        .newsletter-input {
+            flex-grow: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem 0 0 0.25rem;
+        }
+        .newsletter-button {
+            background-color: white;
+            color: #2563eb;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0 0.25rem 0.25rem 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" style="font-size: 1.5rem; font-weight: 600; display: flex; align-items: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                TechFancy
+            </a>
+            <div>
+                <a href="/blog">Blog</a>
+                <a href="/projects">Projects</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
 
-<% if (typeof posts !== 'undefined' && posts.length > 0) { %>
-    <ul>
-        <% posts.forEach(function(post) { %>
-            <li>
-                <h3><%= post.title %></h3>
-                <p><%= post.excerpt %></p>
-                <a href="/posts/<%= post.id %>">Read more</a>
-            </li>
-        <% }); %>
-    </ul>
-<% } else { %>
-    <p>No posts available at the moment.</p>
-<% } %>
+    <div class="hero">
+        <div class="hero-overlay">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Exploring the Cutting Edge of Technology</h1>
+                    <p>Join me on a journey through the latest in software development and tech innovations.</p>
+                    <form class="search-form">
+                        <input type="text" placeholder="Search articles..." class="search-input">
+                        <button type="submit" class="search-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Articles</h2>
+                <a href="/blog" style="color: #2563eb; text-decoration: none;">View all posts</a>
+            </div>
+            <div class="grid">
+                <% if (featuredArticles && featuredArticles.length > 0) { %>
+                    <% featuredArticles.forEach(function(article) { %>
+                        <div class="card">
+                            <img src="<%= article.imageUrl %>" alt="<%= article.title %>" class="card-image">
+                            <div class="card-content">
+                                <h3 class="card-title"><%= article.title %></h3>
+                                <p class="card-description"><%= article.description %></p>
+                                <span class="tag"><%= article.tag %></span>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No featured articles available at the moment.</p>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <section class="section recent-posts">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Recent Posts</h2>
+                <button style="color: #2563eb; background: none; border: 1px solid #2563eb; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer; display: flex; align-items: center;">
+                    Subscribe to RSS
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.5rem;"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+                </button>
+            </div>
+            <div class="grid">
+                <% if (recentPosts && recentPosts.length > 0) { %>
+                    <% recentPosts.forEach(function(post) { %>
+                        <div class="card recent-post-card">
+                            <div class="recent-post-header">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="<%= post.iconColor %>" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="recent-post-icon"><%= post.iconSvg %></svg>
+                                <h3 class="recent-post-title"><%= post.title %></h3>
+                            </div>
+                            <p class="recent-post-date"><%= post.date %></p>
+                            <a href="<%= post.url %>" style="color: #2563eb; text-decoration: none; font-weight: 600;">Read More</a>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No recent posts available at the moment.</p>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2 style="font-size: 1.875rem; font-weight: bold; margin-bottom: 1rem;">Stay Updated with the Latest in Tech</h2>
+                <p style="margin-bottom: 1.5rem;">Subscribe to my newsletter for weekly insights, tutorials, and tech news.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" class="newsletter-input">
+                    <button type="submit" class="newsletter-button">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

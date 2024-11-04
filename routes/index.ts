@@ -1,15 +1,32 @@
 import express from 'express';
-import { getPosts } from '../controllers/posts';
+
+interface Article {
+  imageUrl: string;
+  title: string;
+  description: string;
+  tag: string;
+}
+
+interface Post {
+  title: string;
+  date: string;
+  url: string;
+  iconColor: string;
+  iconSvg: string;
+}
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  try {
-    const posts = await getPosts(req, res);
-    res.render('index', { posts });
-  } catch (error) {
-    res.status(500).render('error', { message: 'Error fetching posts' });
-  }
+router.get('/', (req, res) => {
+  // Initialize empty arrays with proper typing
+  const featuredArticles: Article[] = [];
+  const recentPosts: Post[] = [];
+
+  res.render('index', { 
+    title: 'TechFancy Blog - Home',
+    featuredArticles,
+    recentPosts
+  });
 });
 
 export default router;

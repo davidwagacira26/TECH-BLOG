@@ -1,28 +1,286 @@
-<%- include('layout', { content: ` 
-    <h1>Admin Dashboard</h1>
-
-    <h2>Create New Post</h2>
-    <form action="/admin/posts" method="POST">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
-        <label for="content">Content:</label>
-        <textarea id="content" name="content" required></textarea>
-        <button type="submit">Create Post</button>
-    </form>
-
-    <h2>Manage Posts</h2>
-    <% posts.forEach(post => { %>
-        <div>
-            <h3><%= post.title %></h3>
-            <p><%= post.content %></p>
-            <form action="/admin/posts/<%= post.id %>" method="POST" style="display: inline;">
-                <input type="text" name="title" value="<%= post.title %>" required>
-                <textarea name="content" required><%= post.content %></textarea>
-                <button type="submit">Update</button>
-            </form>
-            <form action="/admin/posts/<%= post.id %>/delete" method="POST" style="display: inline;">
-                <button type="submit">Delete</button>
-            </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFancy Admin Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        nav {
+            background-color: #1e293b;
+            color: white;
+            padding: 1rem 0;
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+        nav a:hover {
+            color: #60a5fa;
+        }
+        main {
+            padding: 2rem 0;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        h1, h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        .search-form {
+            margin-bottom: 1rem;
+        }
+        .search-input {
+            width: 100%;
+            max-width: 20rem;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 1rem;
+        }
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            border-bottom-color: #3b82f6;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            font-weight: bold;
+            color: #6b7280;
+        }
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        .icon {
+            width: 1rem;
+            height: 1rem;
+        }
+        .text-yellow {
+            color: #fbbf24;
+        }
+        .text-blue {
+            color: #60a5fa;
+        }
+        form {
+            display: grid;
+            gap: 1rem;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+        }
+        textarea {
+            height: 150px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/admin" class="text-2xl font-semibold">TechFancy Admin</a>
+            <a href="/" class="hover:text-blue-400">View Blog</a>
         </div>
-    <% }) %>
-` }) %>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Manage Blog Posts</h1>
+                    <button id="newPostBtn" class="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        New Post
+                    </button>
+                </div>
+
+                <form class="search-form" action="/admin/search" method="GET">
+                    <input type="text" name="query" placeholder="Search posts..." class="search-input">
+                </form>
+
+                <div class="tabs">
+                    <a href="/admin" class="tab <%= activeTab === 'all' ? 'active' : '' %>">All Posts</a>
+                    <a href="/admin?filter=featured" class="tab <%= activeTab === 'featured' ? 'active' : '' %>">Featured Posts</a>
+                    <a href="/admin?filter=recent" class="tab <%= activeTab === 'recent' ? 'active' : '' %>">Recent Posts</a>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Featured</th>
+                            <th>Recent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% posts.forEach(function(post) { %>
+                            <tr>
+                                <td><%= post.title %></td>
+                                <td><%= post.date %></td>
+                                <td><%= post.status %></td>
+                                <td>
+                                    <form action="/admin/toggle-featured/<%= post.id %>" method="POST">
+                                        <button type="submit" class="icon-button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon <%= post.isFeatured ? 'text-yellow' : '' %>" viewBox="0 0 24 24" fill="<%= post.isFeatured ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/toggle-recent/<%= post.id %>" method="POST">
+                                        <button type="submit" class="icon-button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon <%= post.isRecent ? 'text-blue' : '' %>" viewBox="0 0 24 24" fill="<%= post.isRecent ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <button class="icon-button edit-post" data-id="<%= post.id %>">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </button>
+                                    <form action="/admin/delete/<%= post.id %>" method="POST" style="display: inline;">
+                                        <button type="submit" class="icon-button" onclick="return confirm('Are you sure you want to delete this post?')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="postFormCard" class="card" style="display: none;">
+                <h2 id="formTitle">New Post</h2>
+                <form id="postForm" action="/admin/create" method="POST">
+                    <input type="hidden" id="postId" name="id">
+                    <div>
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div>
+                        <label for="content">Content:</label>
+                        <textarea id="content" name="content" required></textarea>
+                    </div>
+                    <div>
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div>
+                        <label for="status">Status:</label>
+                        <select id="status" name="status" required>
+                            <option value="Draft">Draft</option>
+                            <option value="Published">Published</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="isFeatured" name="isFeatured">
+                        <label for="isFeatured">Featured Post</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="isRecent" name="isRecent">
+                        <label for="isRecent">Recent Post</label>
+                    </div>
+                    <button type="submit" class="btn">Save Post</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('newPostBtn').addEventListener('click', function() {
+            document.getElementById('postFormCard').style.display = 'block';
+            document.getElementById('formTitle').textContent = 'New Post';
+            document.getElementById('postForm').reset();
+            document.getElementById('postForm').action = '/admin/create';
+        });
+
+        document.querySelectorAll('.edit-post').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = this.getAttribute('data-id');
+                document.getElementById('postFormCard').style.display = 'block';
+                document.getElementById('formTitle').textContent = 'Edit Post';
+                document.getElementById('postId').value = postId;
+                document.getElementById('postForm').action = '/admin/update/' + postId;
+                
+                // Here you would typically fetch the post data and populate the form
+                // For demonstration, we'll just show the form
+            });
+        });
+    </script>
+</body>
+</html>

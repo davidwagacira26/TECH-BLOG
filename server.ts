@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import { Pool } from 'pg';
-import indexRouter from './routes/index';
+import indexRouter from './routes/';
 import adminRouter from './routes/admin';
 
 dotenv.config();
