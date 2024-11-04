@@ -1,19 +1,15 @@
-<%- include('layout', { 
-    title: 'Welcome to Tech Blog',
-    content: `
-        <h2>Latest Posts</h2>
-        <% if (posts && posts.length > 0) { %>
-            <ul>
-                <% posts.forEach(function(post) { %>
-                    <li>
-                        <h3><%= post.title %></h3>
-                        <p><%= post.excerpt %></p>
-                        <a href="/blog/<%= post.id %>">Read more</a>
-                    </li>
-                <% }); %>
-            </ul>
-        <% } else { %>
-            <p>No posts available at the moment.</p>
-        <% } %>
-    `
-}) %>
+<h2>Latest Posts</h2>
+
+<% if (typeof posts !== 'undefined' && posts.length > 0) { %>
+    <ul>
+        <% posts.forEach(function(post) { %>
+            <li>
+                <h3><%= post.title %></h3>
+                <p><%= post.excerpt %></p>
+                <a href="/posts/<%= post.id %>">Read more</a>
+            </li>
+        <% }); %>
+    </ul>
+<% } else { %>
+    <p>No posts available at the moment.</p>
+<% } %>

@@ -1,0 +1,11 @@
+<%- include('layout', { title: post.title }) %>
+
+<article>
+    <h2><%= post.title %></h2>
+    <p class="post-meta">Posted on <%= new Date(post.created_at).toLocaleDateString() %></p>
+    <div class="post-content">
+        <%- post.content %>
+    </div>
+</article>
+
+<a href="/">Back to Home</a>
