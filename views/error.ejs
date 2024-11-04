@@ -1,4 +1,8 @@
-<%- include('layout', { content: `
-    <h1>Error</h1>
-    <p><%= message %></p>
-` }) %>
+<%- include('layout', {
+    title: 'Error',
+    content: `
+        <h2>Error</h2>
+        <p><%= message %></p>
+        <a href="/">Return to Home</a>
+    `
+}) %>
