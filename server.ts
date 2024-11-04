@@ -18,15 +18,6 @@ const pool = new Pool({
   }
 });
 
-// Test database connection
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-  } else {
-    console.log('Connected to the database at:', res.rows[0].now);
-  }
-});
-
 // Middleware
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -34,12 +25,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Make the pool available in the request object
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-  req.pool = pool;
-  next();
-});
 
 // Routes
 app.use('/', indexRouter);
@@ -59,14 +44,5 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-// Add this to make TypeScript recognize the pool property on the request object
-declare global {
-  namespace Express {
-    interface Request {
-      pool: Pool;
-    }
-  }
-}
 
 export default app;
