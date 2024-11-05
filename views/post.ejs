@@ -1,11 +1,314 @@
-<%- include('layout', { title: post.title }) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= post.title %> - TechFancy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #1e293b;
+            color: white;
+            padding: 1rem 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+        }
+        .nav-link svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        article {
+            max-width: 896px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .meta {
+            display: flex;
+            align-items: center;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        .meta svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        .meta span {
+            margin-right: 1rem;
+        }
+        .post-image {
+            position: relative;
+            height: 400px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .category {
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+        }
+        .content {
+            font-size: 1.125rem;
+            line-height: 1.75;
+        }
+        footer {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .tag {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+        }
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .author-info {
+            display: flex;
+            align-items: center;
+        }
+        .author-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            background-color: #d1d5db;
+            margin-right: 1rem;
+        }
+        .author-name {
+            font-weight: 600;
+        }
+        .author-title {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        .share-button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+        }
+        .share-button:hover {
+            background-color: #2563eb;
+        }
+        .share-button svg {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.5rem;
+        }
+        .related-posts {
+            background-color: #f8fafc;
+            padding: 3rem 0;
+        }
+        .related-posts h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .related-posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .related-post {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+        .related-post-image {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+        }
+        .related-post-content {
+            padding: 1rem;
+        }
+        .related-post-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .related-post-excerpt {
+            color: #4b5563;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        .related-post-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .related-post-category {
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .related-post-link {
+            color: #2563eb;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        .related-post-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Back to Blog
+            </a>
+        </div>
+    </nav>
+    <article class="container">
+        <header>
+            <h1><%= post.title %></h1>
+            <div class="meta">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                </svg>
+                <span><%= post.date.toDateString() %></span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                <span>by <%= post.author.name %></span>
+            </div>
+            <% if (post.image) { %>
+                <div class="post-image">
+                    <img src="<%= post.image %>" alt="<%= post.title %>">
+                </div>
+            <% } %>
+            <div class="categories">
+                <% post.categories.forEach(category => { %>
+                    <a href="/category/<%= category.id %>" class="category">
+                        <%= category.name %>
+                    </a>
+                <% }); %>
+            </div>
+        </header>
 
-<article>
-    <h2><%= post.title %></h2>
-    <p class="post-meta">Posted on <%= new Date(post.created_at).toLocaleDateString() %></p>
-    <div class="post-content">
-        <%- post.content %>
-    </div>
-</article>
+        <div class="content">
+            <%- post.content %>
+        </div>
 
-<a href="/">Back to Home</a>
+        <footer>
+            <div class="tags">
+                <% post.tags.forEach(tag => { %>
+                    <a href="/tag/<%= tag.id %>" class="tag">
+                        #<%= tag.name %>
+                    </a>
+                <% }); %>
+            </div>
+            <div class="author">
+                <div class="author-info">
+                    <div class="author-avatar"></div>
+                    <div>
+                        <p class="author-name"><%= post.author.name %></p>
+                        <p class="author-title">Author</p>
+                    </div>
+                </div>
+                <button class="share-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                    </svg>
+                    Share Article
+                </button>
+            </div>
+        </footer>
+    </article>
+    <% if (typeof relatedPosts !== 'undefined' && relatedPosts.length > 0) { %>
+        <section class="related-posts">
+            <div class="container">
+                <h2>Related Articles</h2>
+                <div class="related-posts-grid">
+                    <% relatedPosts.forEach(relatedPost => { %>
+                        <div class="related-post">
+                            <% if (relatedPost.image) { %>
+                                <img src="<%= relatedPost.image %>" alt="<%= relatedPost.title %>" class="related-post-image">
+                            <% } else { %>
+                                <div class="related-post-image" style="background-color: #d1d5db;"></div>
+                            <% } %>
+                            <div class="related-post-content">
+                                <h3 class="related-post-title"><%= relatedPost.title %></h3>
+                                <p class="related-post-excerpt"><%= relatedPost.content.substring(0, 100) %>...</p>
+                                <div class="related-post-categories">
+                                    <% relatedPost.categories.slice(0, 2).forEach(category => { %>
+                                        <span class="related-post-category">
+                                            <%= category.name %>
+                                        </span>
+                                    <% }); %>
+                                </div>
+                                <a href="/post/<%= relatedPost.id %>" class="related-post-link">Read More</a>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+    <% } %>
+</body>
+</html>

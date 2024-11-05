@@ -10,6 +10,7 @@
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.5;
+            color: #333;
         }
         .container {
             width: 100%;
@@ -199,8 +200,8 @@
                 TechFancy
             </a>
             <div>
+                <a href="/">Home</a>
                 <a href="/blog">Blog</a>
-                <a href="/projects">Projects</a>
                 <a href="/about">About</a>
                 <a href="/contact">Contact</a>
             </div>
@@ -212,9 +213,9 @@
             <div class="container">
                 <div class="hero-content">
                     <h1>Exploring the Cutting Edge of Technology</h1>
-                    <p>Join me on a journey through the latest in software development and tech innovations.</p>
-                    <form class="search-form">
-                        <input type="text" placeholder="Search articles..." class="search-input">
+                    <p>Join us on a journey through the latest in software development and tech innovations.</p>
+                    <form class="search-form" action="/search" method="GET">
+                        <input type="text" name="query" placeholder="Search articles..." class="search-input">
                         <button type="submit" class="search-button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                         </button>
@@ -231,14 +232,17 @@
                 <a href="/blog" style="color: #2563eb; text-decoration: none;">View all posts</a>
             </div>
             <div class="grid">
-                <% if (featuredArticles && featuredArticles.length > 0) { %>
-                    <% featuredArticles.forEach(function(article) { %>
+                <% if (featuredPosts && featuredPosts.length > 0) { %>
+                    <% featuredPosts.forEach(function(post) { %>
                         <div class="card">
-                            <img src="<%= article.imageUrl %>" alt="<%= article.title %>" class="card-image">
+                            <img src="/placeholder.svg?height=192&width=384" alt="<%= post.title %>" class="card-image">
                             <div class="card-content">
-                                <h3 class="card-title"><%= article.title %></h3>
-                                <p class="card-description"><%= article.description %></p>
-                                <span class="tag"><%= article.tag %></span>
+                                <h3 class="card-title"><%= post.title %></h3>
+                                <p class="card-description"><%= post.content.substring(0, 100) %>...</p>
+                                <% if (post.categories && post.categories.length > 0) { %>
+                                    <span class="tag"><%= post.categories[0].name %></span>
+                                <% } %>
+                                <a href="/post/<%= post.id %>" style="color: #2563eb; text-decoration: none; display: block; margin-top: 1rem;">Read More</a>
                             </div>
                         </div>
                     <% }); %>
@@ -263,11 +267,11 @@
                     <% recentPosts.forEach(function(post) { %>
                         <div class="card recent-post-card">
                             <div class="recent-post-header">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="<%= post.iconColor %>" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="recent-post-icon"><%= post.iconSvg %></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="recent-post-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                 <h3 class="recent-post-title"><%= post.title %></h3>
                             </div>
-                            <p class="recent-post-date"><%= post.date %></p>
-                            <a href="<%= post.url %>" style="color: #2563eb; text-decoration: none; font-weight: 600;">Read More</a>
+                            <p class="recent-post-date"><%= post.date.toDateString() %></p>
+                            <a href="/post/<%= post.id %>" style="color: #2563eb; text-decoration: none; font-weight: 600;">Read More</a>
                         </div>
                     <% }); %>
                 <% } else { %>
@@ -281,9 +285,9 @@
         <div class="container">
             <div class="newsletter-content">
                 <h2 style="font-size: 1.875rem; font-weight: bold; margin-bottom: 1rem;">Stay Updated with the Latest in Tech</h2>
-                <p style="margin-bottom: 1.5rem;">Subscribe to my newsletter for weekly insights, tutorials, and tech news.</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email" class="newsletter-input">
+                <p style="margin-bottom: 1.5rem;">Subscribe to our newsletter for weekly insights, tutorials, and tech news.</p>
+                <form class="newsletter-form" action="/subscribe" method="POST">
+                    <input type="email" name="email" placeholder="Enter your email" class="newsletter-input" required>
                     <button type="submit" class="newsletter-button">Subscribe</button>
                 </form>
             </div>
