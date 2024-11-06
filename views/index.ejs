@@ -235,7 +235,11 @@
                 <% if (featuredPosts && featuredPosts.length > 0) { %>
                     <% featuredPosts.forEach(function(post) { %>
                         <div class="card">
-                            <img src="/placeholder.svg?height=192&width=384" alt="<%= post.title %>" class="card-image">
+                            <% if (post.thumbnail) { %>
+                                <img src="<%= post.thumbnail %>" alt="<%= post.title %>" class="card-image">
+                            <% } else { %>
+                                <img src="/placeholder.svg?height=192&width=384" alt="<%= post.title %>" class="card-image">
+                            <% } %>
                             <div class="card-content">
                                 <h3 class="card-title"><%= post.title %></h3>
                                 <p class="card-description"><%= post.content.substring(0, 100) %>...</p>
@@ -252,7 +256,7 @@
             </div>
         </div>
     </section>
-
+    
     <section class="section recent-posts">
         <div class="container">
             <div class="section-header">
@@ -267,7 +271,11 @@
                     <% recentPosts.forEach(function(post) { %>
                         <div class="card recent-post-card">
                             <div class="recent-post-header">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="recent-post-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <% if (post.thumbnail) { %>
+                                    <img src="<%= post.thumbnail %>" alt="<%= post.title %>" class="recent-post-image" style="width: 24px; height: 24px; object-fit: cover; border-radius: 50%;">
+                                <% } else { %>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="recent-post-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <% } %>
                                 <h3 class="recent-post-title"><%= post.title %></h3>
                             </div>
                             <p class="recent-post-date"><%= post.date.toDateString() %></p>
