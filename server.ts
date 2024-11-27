@@ -6,10 +6,10 @@ import multer from 'multer';
 import fs from 'fs/promises';
 import jwt from 'jsonwebtoken';
 import { expressjwt } from 'express-jwt';
-import indexRouter from './routes/';
+import indexRouter from './routes/index';
 import adminRouter from './routes/admin';
 import blogRoutes from './routes/blog';
-import postRoutes from './routes/post'
+import postRoutes from './routes/post';
 
 // Load environment variables
 dotenv.config();
@@ -96,12 +96,12 @@ app.post('/login', (req: Request, res: Response) => {
 
 // Routes
 app.use('/', indexRouter);
-app.use('/admin', adminRouter); // authMiddleware is now applied globally
+app.use('/admin', authMiddleware, adminRouter);
 app.use('/', blogRoutes);
 app.use('/post', postRoutes);
 
 // File upload route example
-app.post('/upload', upload.single('file'), (req: Request, res: Response) => {
+app.post('/upload', authMiddleware, upload.single('file'), (req: Request, res: Response) => {
   const file = req.file;
   if (!file) {
     res.status(400).send('No file uploaded.');
@@ -131,5 +131,4 @@ const server = app.listen(PORT, () => {
   console.log(`Project root: ${projectRoot}`);
 });
 
-// Export app and server for testing purposes
-export { app, server };
+// Export app and server 
